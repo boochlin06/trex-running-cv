@@ -1,0 +1,83 @@
+<resources>
+    <string name="app_name">Trex Jump</string>
+
+    <string name="gaze_title">Gaze</string>
+    <string name="gaze_asleep">Asleep</string>
+    <string name="gaze_wake_up">Wake up</string>
+
+
+    <string name="emotion_title">Emotion</string>
+    <string name="emotion_error">Error</string>
+    <string name="emotion_angry">Angry</string>
+    <string name="emotion_disgust">Disgust</string>
+    <string name="emotion_happy">Happy</string>
+    <string name="emotion_sad">Sad</string>
+    <string name="emotion_surprise">Surprise</string>
+    <string name="emotion_fear">Fear</string>
+    <string name="emotion_neutral">Neutral</string>
+
+
+    <string name="emotion_recording_result">Recording result</string>
+
+
+    <string-array name="emotion_capture_spinner_array_list">
+        <item>@string/emotion_angry</item>
+        <item>@string/emotion_disgust</item>
+        <item>@string/emotion_happy</item>
+        <item>@string/emotion_sad</item>
+        <item>@string/emotion_surprise</item>
+        <item>@string/emotion_fear</item>
+        <item>@string/emotion_neutral</item>
+    </string-array>
+
+
+    <string name="attribute_other">Other</string>
+
+    <!--nine emotion 0 angry 1 disgust 2 happy 3 sad 4 surprise 5 fear 6 neutral 7 contempt 8 confused-->
+
+    <!--follow emotion module output order-->
+    <string-array name="emotion_color_list">
+        <item>@string/color_angry</item>
+        <item>@string/color_disgust</item>
+        <item>@string/color_happy</item>
+        <item>@string/color_sad</item>
+        <item>@string/color_surprise</item>
+        <item>@string/color_fear</item>
+        <item>@string/color_neutral</item>
+        <item>@string/color_contempt</item>
+        <item>@string/color_confuse</item>
+    </string-array>
+
+    <string name="color_angry">"紅色“</string>
+    <string name="color_confuse">"淡黃色“</string>
+    <string name="color_contempt">"紫棕色“</string>
+    <string name="color_disgust">"綠色“</string>
+    <string name="color_fear">"紫色“</string>
+    <string name="color_happy">"黃色“</string>
+    <string name="color_sad">"藍色“</string>
+    <string name="color_surprise">"橘色“</string>
+    <string name="color_neutral">"白色“</string>
+
+    <string name="rawData_emotion_bar_summary">
+Angry:%1.2f\n
+Disgust:%2.2f\n
+Happy:%3.2f\n
+Sad:%4.2f\n
+Surprise:%5.2f\n
+Fear:%6.2f\n
+Neutral:%7.2f\n
+Contempt:%8.2f\n
+Confused:%9.2f\n
+    </string>
+
+    <string name="match_id">遊戲ID:%1$s</string>
+    <string name="game_conclusion_single_winner_in_rank">贏家，拯救了%1$d隻暴龍，排行第%2$d名</string>
+    <string name="game_conclusion_single_winner">贏家，拯救了%1$d隻暴龍。</string>
+    <string name="game_conclusion_double_winner_in_rank">平手，拯救了%1$d隻暴龍，排行第%2$d名</string>
+    <string name="game_conclusion_double_winner">平手，拯救了%1$d隻暴龍。</string>
+    <string name="player_icon_checking">玩家：偵測中。。。</string>
+    <string name="player_icon_check_done">玩家：偵測完成</string>
+
+    <string name="input_name">請輸入名字</string>
+
+</resources>

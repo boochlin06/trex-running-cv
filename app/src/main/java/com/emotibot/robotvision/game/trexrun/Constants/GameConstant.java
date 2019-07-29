@@ -1,0 +1,27 @@
+package com.emotibot.robotvision.game.trexrun.Constants;
+
+public class GameConstant {
+    public static final int GAMESPEED = 20;
+    public static final long FRAME_TIIME = 30;
+    public static final long CHECK_GET_SCORE_JUDGE_TIME = 300;//ms
+    public static final long PRODUCE_DRAGON_TIME_GAP = 3000;//ms
+    public static final int PRODUCE_OBSTACLE_COUNT_IN_ONE_GAP = 2;
+    public static long GAME_TIME_LIMIT = 60; //60s
+
+
+    public static final float PLAY_LEFT_CHECK_X = 250;
+    public static final float PLAY_LEFT_CHECK_Y = 250;
+    public static final float PLAY_LEFT_CHECK_WIDTH = 250;
+    public static final float PLAY_LEFT_CHECK_HEIGHT = 250;
+
+
+//    public static final float PLAY_LEFT_CHECK_X = 50;
+//    public static final float PLAY_LEFT_CHECK_Y = 40;
+//    public static final float PLAY_LEFT_CHECK_WIDTH = 50;
+//    public static final float PLAY_LEFT_CHECK_HEIGHT = 40;
+
+    public static final float PLAY_RIGHT_CHECK_X = 1000;
+    public static final float PLAY_RIGHT_CHECK_Y = 250;
+    public static final float PLAY_RIGHT_CHECK_WIDTH = 250;
+    public static final float PLAY_RIGHT_CHECK_HEIGHT = 250;
+}
