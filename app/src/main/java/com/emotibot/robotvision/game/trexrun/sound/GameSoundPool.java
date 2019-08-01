@@ -23,7 +23,7 @@ public class GameSoundPool {
     }
 
     public void initGameSound() {
-        map.put(1, soundPool.load(mainActivity, R.raw.game, 1));
+        map.put(1, soundPool.load(mainActivity, R.raw.background, 1));
 
     }
 

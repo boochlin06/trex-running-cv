@@ -2,6 +2,7 @@ package com.emotibot.robotvision.game.trexrun.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -75,6 +76,7 @@ public class GameActivity extends AppCompatActivity {
 
     private Mat mCameraBuffer = null;
 
+    private MediaPlayer mediaPlayer;
     private RemoteLightService remoteLightService;
     private GameView gameView;
     private Bitmap bmpPreview;
@@ -118,6 +120,11 @@ public class GameActivity extends AppCompatActivity {
         mCameraView.setCvCameraViewListener(new CameraFrameProcessor());
         startReadyGame();
         startGame();
+        mediaPlayer = MediaPlayer.create(this, R.raw.background);
+        mediaPlayer.setLooping(true);
+        if (!mediaPlayer.isPlaying()) {
+//            mediaPlayer.start();
+        }
     }
 
     private void startReadyGame() {
@@ -268,6 +275,7 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mediaPlayer.stop();
         if (null != mCameraView) {
             mCameraView.disableView();
         }

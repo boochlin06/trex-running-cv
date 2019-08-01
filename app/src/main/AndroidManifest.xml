@@ -32,13 +32,8 @@
         </activity>
         <activity
             android:name="com.emotibot.robotvision.game.trexrun.activity.GameActivity"
-            android:label="TREX Run game"
             android:screenOrientation="landscape"
             android:taskAffinity="com.emotibot.robotvision.standardsample">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.emotibot.robotvision.game.trexrun.activity.FinishActivity"

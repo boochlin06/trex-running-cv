@@ -194,7 +194,7 @@ public class GameView extends View {
         Obstacle obstacle = factory.createRandomObstacle(getResources(), group);
         obstacle.setObject_width(getWidth());
         obstacle.setGroup(group);
-        obstacle.setObject_x((float) (getWidth() - Math.random() * 150));
+        obstacle.setObject_x((float) (getWidth() + Math.random() * 150));
         obstacle.setObject_y(group == 0 ? GameConstant.PLAYER1_START_GROUND_Y - obstacle.getObject_height()
                 : GameConstant.PLAYER2_START_GROUND_Y - obstacle.getObject_height());
         if (group == 0) {
