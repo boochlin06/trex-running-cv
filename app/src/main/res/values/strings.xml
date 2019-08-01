@@ -70,14 +70,13 @@ Contempt:%8.2f\n
 Confused:%9.2f\n
     </string>
 
-    <string name="match_id">遊戲ID:%1$s</string>
-    <string name="game_conclusion_single_winner_in_rank">贏家，拯救了%1$d隻暴龍，排行第%2$d名</string>
-    <string name="game_conclusion_single_winner">贏家，拯救了%1$d隻暴龍。</string>
-    <string name="game_conclusion_double_winner_in_rank">平手，拯救了%1$d隻暴龍，排行第%2$d名</string>
-    <string name="game_conclusion_double_winner">平手，拯救了%1$d隻暴龍。</string>
-    <string name="player_icon_checking">玩家：偵測中。。。</string>
-    <string name="player_icon_check_done">玩家：偵測完成</string>
-
-    <string name="input_name">請輸入名字</string>
+    <string name="match_id">游戏ID:%1$s</string>
+    <string name="game_conclusion_single_winner_in_rank">赢家，拯救了%1$d只暴龙，排行第%2$d名</string>
+    <string name="game_conclusion_single_winner">赢家，拯救了%1$d只暴龙。 </string>
+    <string name="game_conclusion_double_winner_in_rank">平手，拯救了%1$d只暴龙，排行第%2$d名</string>
+    <string name="game_conclusion_double_winner">平手，拯救了%1$d只暴龙。 </string>
+    <string name="player_icon_checking">玩家：侦测中。 。 。 </string>
+    <string name="player_icon_check_done">玩家：侦测完成</string>
+    <string name="input_name">请输入名字</string>
 
 </resources>

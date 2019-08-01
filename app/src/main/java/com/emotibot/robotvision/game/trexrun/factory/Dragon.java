@@ -45,7 +45,7 @@ public abstract class Dragon extends GameObject {
             return;
         }
 
-        if (isFiring ) {
+        if (isFiring) {
             if (frameCount % 10 < 10 / 2) {
                 if (!firedBitmap.isRecycled())
                     canvas.drawBitmap(firedBitmap, object_x, object_y, paint);

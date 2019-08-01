@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="22dp"
-    android:layout_marginTop="14dp"
+    android:layout_marginTop="20dp"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
@@ -20,7 +20,7 @@
     <TextView
         android:id="@+id/txtName"
         android:layout_width="80dp"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
         android:ellipsize="marquee"
         android:focusable="true"

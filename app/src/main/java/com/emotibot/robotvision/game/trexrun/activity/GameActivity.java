@@ -16,7 +16,6 @@ import com.emotibot.robotvision.game.trexrun.R;
 import com.emotibot.robotvision.game.trexrun.Utility;
 import com.emotibot.robotvision.game.trexrun.model.Player;
 import com.emotibot.robotvision.game.trexrun.model.RemoteLightService;
-import com.emotibot.robotvision.game.trexrun.sound.GameSoundPool;
 import com.emotibot.robotvision.game.trexrun.view.GameView;
 
 import org.opencv.android.CameraBridgeViewBase;
@@ -31,7 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.emotibot.robotvision.game.trexrun.Constants.GameConstant.FRAME_TIIME;
+import static com.emotibot.robotvision.game.trexrun.Constants.GameConstant.FRAME_TIME;
 import static com.emotibot.robotvision.game.trexrun.Constants.GameConstant.GAME_TIME_LIMIT;
 import static com.emotibot.robotvision.game.trexrun.activity.StartActivity.BUNDLE_MATCH_ID;
 import static com.emotibot.robotvision.game.trexrun.activity.StartActivity.BUNDLE_PLAY_LEFT;
@@ -69,15 +68,14 @@ public class GameActivity extends AppCompatActivity {
     TextView txtTime;
     @BindView(R.id.imgEnd)
     ImageView imgEnd;
-    @BindView(R.id.txtPlayerLeft)
-    TextView txtPlayerLeft;
+    @BindView(R.id.txtPlayerUp)
+    TextView txtPlayerUp;
     @BindView(R.id.txtPlayerRight)
     TextView txtPlayerRight;
 
     private Mat mCameraBuffer = null;
 
     private RemoteLightService remoteLightService;
-    private GameSoundPool sounds;
     private GameView gameView;
     private Bitmap bmpPreview;
     private InferResult mInferResult;
@@ -107,24 +105,16 @@ public class GameActivity extends AppCompatActivity {
             playerLeft.setGroup(0);
             matchId = 9527;
         } else {
-
             playerLeft = bundle.getParcelable(StartActivity.BUNDLE_PLAY_LEFT);
             playerRight = bundle.getParcelable(StartActivity.BUNDLE_PLAY_RIGHT);
-
             matchId = bundle.getInt(BUNDLE_MATCH_ID);
         }
 
         camerBlock.setVisibility(View.INVISIBLE);
 
-        sounds = new GameSoundPool(this);
-        sounds.initGameSound();
-
         remoteLightService = RemoteLightService.getInstance();
-
         mCameraView = (JavaCameraView) findViewById(R.id.camera_impl);
-
         IntelliEyeCoreManager.getInstance().init(this, true, false, false, false, false);
-
         mCameraView.setCvCameraViewListener(new CameraFrameProcessor());
         startReadyGame();
         startGame();
@@ -139,7 +129,7 @@ public class GameActivity extends AppCompatActivity {
                 readyTime = System.currentTimeMillis();
                 while (isReady) {
                     try {
-                        sleep(FRAME_TIIME);
+                        sleep(FRAME_TIME);
                         runOnUiThread(new Runnable() {
 
                             @Override
@@ -200,11 +190,10 @@ public class GameActivity extends AppCompatActivity {
                 startTime = System.currentTimeMillis();
                 while (isPlaying) {
                     try {
-                        sleep(FRAME_TIIME);
+                        sleep(FRAME_TIME);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
                                 int playTime = (int) (System.currentTimeMillis() - startTime) / 1000;
                                 if (playTime >= GAME_TIME_LIMIT && isPlaying) {
                                     isPlaying = false;
@@ -214,7 +203,6 @@ public class GameActivity extends AppCompatActivity {
                                     txtTime.setText(min + ":" + sec);
                                     gotoFinishActivity();
                                 } else {
-
                                     String min = Long.toString((GAME_TIME_LIMIT - playTime) / 60);
                                     String sec = Long.toString((GAME_TIME_LIMIT - playTime) % 60);
                                     txtTime.setText(min + ":" + sec);
@@ -225,12 +213,11 @@ public class GameActivity extends AppCompatActivity {
                                         playerRight.setImageInPlayingPath(getCacheDir() + "public-screenshot-1.jpg");
                                         playerLeft.setImageInPlayingPath(getCacheDir() + "public-screenshot-1.jpg");
                                         Utility.takeScreenshot(playerRight.getImageInPlayingPath(), GameActivity.this);
-                                        Utility.takeScreenshot(playerRight.getImageInPlayingPath(), GameActivity.this);
 
                                     }
                                     imgPreview.setImageBitmap(bmpPreview);
-                                    txtPlayerLeft.setText("X" + gameView.getPlayerUp().getScore());
-                                    txtPlayerRight.setText("X" + gameView.getPlayerDown().getScore());
+                                    txtPlayerUp.setText(gameView.getPlayerUp().getScore() + "公尺");
+                                    txtPlayerRight.setText(gameView.getPlayerDown().getScore() + "公尺");
                                 }
                             }
                         });
@@ -316,5 +303,4 @@ public class GameActivity extends AppCompatActivity {
             return cameraFrame;
         }
     }
-
 }

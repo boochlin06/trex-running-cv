@@ -9,13 +9,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcyRank"
 
-        android:layout_width="250dp"
+        android:layout_width="280dp"
         android:layout_height="400dp"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="68dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginRight="10dp"
         android:clipToPadding="false"
-        android:paddingTop="75dp"
+        android:paddingTop="60dp"
         android:scrollbars="vertical"
         android:background="@drawable/bg_ranking"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

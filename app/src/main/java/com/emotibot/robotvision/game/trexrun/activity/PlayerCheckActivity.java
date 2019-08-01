@@ -46,7 +46,7 @@ public class PlayerCheckActivity extends AppCompatActivity {
     private static final String TAG = PlayerCheckActivity.class.getSimpleName();
     @BindView(R.id.camera_impl)
     JavaCameraView cameraImpl;
-    @BindView(R.id.txtPlayerLeft)
+    @BindView(R.id.txtPlayerUp)
     TextView txtPlayerLeft;
     @BindView(R.id.txtPlayerRight)
     TextView txtPlayerRight;

@@ -55,43 +55,43 @@ public class Obstacle extends GameObject {
         switch (type) {
             case 0:
                 defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree1);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree1_black);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_tree1);
                 break;
             case 1:
                 defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree2);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree2_black);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_tree2);
                 break;
             case 2:
                 defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree3);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree3_black);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_tree3);
                 break;
             case 3:
                 defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree4);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree4_black);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_tree4);
                 break;
             case 4:
                 defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree5);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree5_black);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_tree5);
                 break;
             case 5:
                 defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree6);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree6_black);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_tree6);
                 break;
             case 6:
                 defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.car1);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.car_black);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_car);
                 break;
             case 7:
                 defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.car2);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.car_black);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_car);
                 break;
             case 8:
                 defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.car3);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.car_black);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_car);
                 break;
             case 9:
                 defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.car4);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.car_black);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_car);
                 break;
 
         }
@@ -113,7 +113,7 @@ public class Obstacle extends GameObject {
         this.resources = resources;
         this.paint = new Paint();
         this.group = group;
-        speed = 8;
+        this.speed = GameConstant.GAMESPEED;
         initBitmap();
         this.object_width = defaultBitmap.getWidth();
         this.object_height = defaultBitmap.getHeight();

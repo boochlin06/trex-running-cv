@@ -13,7 +13,6 @@ public abstract class GameObject {
 
     protected float screen_width;
     protected float screen_height;
-    protected boolean isAlive;
     protected Paint paint;
     protected Resources resources;
     protected Bitmap defaultBitmap;
@@ -84,14 +83,6 @@ public abstract class GameObject {
 
     public void setObject_height(float object_height) {
         this.object_height = object_height;
-    }
-
-    public boolean isAlive() {
-        return isAlive;
-    }
-
-    public void setAlive(boolean alive) {
-        isAlive = alive;
     }
 
     public int getGroup() {

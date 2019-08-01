@@ -23,8 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.emotibot.robotvision.game.trexrun.Constants.GameConstant.CHECK_GET_SCORE_JUDGE_TIME;
-import static com.emotibot.robotvision.game.trexrun.Constants.GameConstant.PRODUCE_OBSTACLE_COUNT_IN_ONE_GAP;
-import static com.emotibot.robotvision.game.trexrun.Constants.GameConstant.PRODUCE_OBSTACLE_TIME_GAP;
+import static com.emotibot.robotvision.game.trexrun.Constants.GameConstant.PRODUCE_OBSTACLE_DISTANCE_GAP;
 
 public class GameView extends View {
     public static String TAG = GameView.class.getSimpleName();
@@ -38,7 +37,6 @@ public class GameView extends View {
     private List<Obstacle> obstacleUpList;
     private List<Obstacle> obstacleDownList;
 
-    private long prevProduceObstacleTime = 0;
     private long prevCheckPlayerScoreTime = 0;
 
     private int rightObstacleCount = 0;
@@ -49,45 +47,21 @@ public class GameView extends View {
     private int cloudUpX1 = 0, cloudUpX2;
     private int cloudDownX1 = 0, cloudDownX2;
     private int sceenHeight, screenWidth = 0;
+    private int speed = GameConstant.GAMESPEED;
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         drawCloud(canvas);
-
-        synchronized (GameView.class) {
-            if (System.currentTimeMillis() - prevProduceObstacleTime > PRODUCE_OBSTACLE_TIME_GAP) {
-                produceNewObstacle(PRODUCE_OBSTACLE_COUNT_IN_ONE_GAP);
-                prevProduceObstacleTime = System.currentTimeMillis();
-            }
+        if (playerDragonUp.isMoving() && playerUp.getScore() % PRODUCE_OBSTACLE_DISTANCE_GAP == 0) {
+            produceNewObstacle(0);
         }
+        if (playerDragonDown.isMoving() && playerDown.getScore() % PRODUCE_OBSTACLE_DISTANCE_GAP == 0) {
+            produceNewObstacle(1);
+        }
+        obstacleViewLogic();
+
         List<Obstacle> release = new ArrayList();
-
-        if (obstacleUpList.size() > 0
-                && obstacleUpList.get(0).getObject_x() < playerDragonUp.getObject_x() + playerDragonUp.getObject_width() / 2
-                && !obstacleUpList.get(0).isFired()) {
-            if (playerDragonUp.isFiring()) {
-                obstacleUpList.get(0).setFired(true);
-                for (int i = 0; i < obstacleUpList.size(); i++) {
-                    Obstacle obstacle = obstacleUpList.get(i);
-                    obstacle.setMoving(true);
-                }
-                playerDragonUp.setMoving(true);
-            } else {
-                for (int i = 0; i < obstacleUpList.size(); i++) {
-                    Obstacle obstacle = obstacleUpList.get(i);
-                    obstacle.setMoving(false);
-                }
-                playerDragonUp.setMoving(false);
-            }
-        } else {
-            for (int i = 0; i < obstacleUpList.size(); i++) {
-                Obstacle obstacle = obstacleUpList.get(i);
-                obstacle.setMoving(true);
-            }
-            playerDragonUp.setMoving(true);
-        }
-
         for (int i = 0; i < obstacleUpList.size(); i++) {
             Obstacle obstacle = obstacleUpList.get(i);
             obstacle.drawSelf(canvas);
@@ -96,24 +70,8 @@ public class GameView extends View {
                 obstacle.release();
             }
         }
-        obstacleUpList.removeAll(release);
         release = new ArrayList();
-        if (obstacleDownList.size() > 0
-                && obstacleDownList.get(0).getObject_x() < playerDragonDown.getObject_x() + playerDragonDown.getObject_width() / 2
-                || playerDragonDown.isFiring()) {
-            for (int i = 0; i < obstacleDownList.size(); i++) {
-                Obstacle obstacle = obstacleDownList.get(i);
-                obstacle.setMoving(false);
-            }
-            playerDragonDown.setMoving(false);
-        } else {
-            for (int i = 0; i < obstacleDownList.size(); i++) {
-                Obstacle obstacle = obstacleDownList.get(i);
-                obstacle.setMoving(true);
-            }
-            playerDragonDown.setMoving(true);
-        }
-
+        obstacleUpList.removeAll(release);
         for (int i = 0; i < obstacleDownList.size(); i++) {
             Obstacle obstacle = obstacleDownList.get(i);
             obstacle.drawSelf(canvas);
@@ -122,25 +80,76 @@ public class GameView extends View {
                 obstacle.release();
             }
         }
+        obstacleDownList.removeAll(release);
         playerDragonUp.drawSelf(canvas);
         playerDragonDown.drawSelf(canvas);
-//        Log.d("test", "screen width:" + getWidth() + ",dragon width:" + playerDragonUp.getObject_width() + ",cloud width:" + backgroundCloudTop.getWidth());
+        playerUp.setScore(playerDragonUp.isMoving() ? playerUp.getScore() + 1 : playerUp.getScore());
+        playerDown.setScore(playerDragonDown.isMoving() ? playerDown.getScore() + 1 : playerDown.getScore());
     }
 
-    public Player getPlayerUp() {
-        return playerUp;
+    private synchronized void obstacleViewLogic() {
+        for (int i = 0; i < obstacleUpList.size(); i++) {
+            Obstacle obstacle = obstacleUpList.get(i);
+            // In fire range
+            if (obstacle.getObject_x() < playerDragonUp.getObject_x() + playerDragonUp.getObject_width() * 2 / 3) {
+                if (!obstacle.isFired()) {
+                    if (playerDragonUp.isFiring()) {
+                        obstacle.setFired(true);
+                        obstacle.setMoving(false);
+                        setPlayerStatus(obstacleUpList, playerDragonUp, false);
+                        break;
+                    } else {
+                        setPlayerStatus(obstacleUpList, playerDragonUp, false);
+                        break;
+                    }
+                } else {
+                    setPlayerStatus(obstacleUpList, playerDragonUp, true);
+                }
+            } else {
+                if (playerDragonUp.isFiring()) {
+                    setPlayerStatus(obstacleUpList, playerDragonUp, false);
+                } else {
+
+                    setPlayerStatus(obstacleUpList, playerDragonUp, true);
+                }
+                break;
+            }
+        }
+
+        for (int i = 0; i < obstacleDownList.size(); i++) {
+            Obstacle obstacle = obstacleDownList.get(i);
+            // In fire range
+            if (obstacle.getObject_x() < playerDragonDown.getObject_x() + playerDragonDown.getObject_width() * 2 / 3) {
+                if (!obstacle.isFired()) {
+                    if (playerDragonDown.isFiring()) {
+                        obstacle.setFired(true);
+                        obstacle.setMoving(false);
+                        setPlayerStatus(obstacleDownList, playerDragonDown, false);
+                        break;
+                    } else {
+                        setPlayerStatus(obstacleDownList, playerDragonDown, false);
+                        break;
+                    }
+                } else {
+                    setPlayerStatus(obstacleDownList, playerDragonDown, true);
+                }
+            } else {
+                if (playerDragonDown.isFiring()) {
+                    setPlayerStatus(obstacleDownList, playerDragonDown, false);
+                } else {
+                    setPlayerStatus(obstacleDownList, playerDragonDown, true);
+                }
+                break;
+            }
+        }
     }
 
-    public void setPlayerUp(Player playerUp) {
-        this.playerUp = playerUp;
-    }
-
-    public Player getPlayerDown() {
-        return playerDown;
-    }
-
-    public void setPlayerDown(Player playerDown) {
-        this.playerDown = playerDown;
+    private void setPlayerStatus(List<Obstacle> obstacleList, PlayerDragon dragon, boolean move) {
+        for (int i = 0; i < obstacleList.size(); i++) {
+            Obstacle obstacle = obstacleList.get(i);
+            obstacle.setMoving(move);
+        }
+        dragon.setMoving(move);
     }
 
     private void drawCloud(Canvas canvas) {
@@ -151,17 +160,14 @@ public class GameView extends View {
         viewCloudLogic();
     }
 
-    public void viewCloudLogic() {
+    public synchronized void viewCloudLogic() {
+        speed = playerDragonDown.isMoving() ? GameConstant.GAMESPEED : 2;
         if (cloudDownX1 > cloudDownX2) {
-            if (!playerDragonDown.isFiring() && playerDragonDown.isMoving()) {
-                cloudDownX1 -= 10;
-                cloudDownX2 = cloudDownX1 + backgroundCloudDown.getWidth();
-            }
+            cloudDownX1 -= speed;
+            cloudDownX2 = cloudDownX1 + backgroundCloudDown.getWidth();
         } else {
-            if (!playerDragonDown.isFiring() && playerDragonDown.isMoving()) {
-                cloudDownX2 -= 10;
-                cloudDownX1 = cloudDownX2 + backgroundCloudDown.getWidth();
-            }
+            cloudDownX2 -= speed;
+            cloudDownX1 = cloudDownX2 + backgroundCloudDown.getWidth();
         }
         if (cloudDownX1 >= backgroundCloudTop.getWidth()) {
             cloudDownX1 = cloudDownX2 - backgroundCloudDown.getWidth();
@@ -169,16 +175,13 @@ public class GameView extends View {
             cloudDownX2 = cloudDownX1 - backgroundCloudDown.getWidth();
         }
 
+        speed = playerDragonUp.isMoving() ? GameConstant.GAMESPEED : 2;
         if (cloudUpX1 > cloudUpX2) {
-            if (!playerDragonUp.isFiring() && playerDragonUp.isMoving()) {
-                cloudUpX1 -= 10;
-                cloudUpX2 = cloudUpX1 + backgroundCloudTop.getWidth();
-            }
+            cloudUpX1 -= speed;
+            cloudUpX2 = cloudUpX1 + backgroundCloudTop.getWidth();
         } else {
-            if (!playerDragonUp.isFiring() && playerDragonUp.isMoving()) {
-                cloudUpX2 -= 10;
-                cloudUpX1 = cloudUpX2 + backgroundCloudTop.getWidth();
-            }
+            cloudUpX2 -= speed;
+            cloudUpX1 = cloudUpX2 + backgroundCloudTop.getWidth();
         }
         if (cloudUpX1 >= backgroundCloudTop.getWidth()) {
             cloudUpX1 = cloudUpX2 - backgroundCloudTop.getWidth();
@@ -187,26 +190,22 @@ public class GameView extends View {
         }
     }
 
-    private synchronized void produceNewObstacle(int num) {
-        for (int i = 0; i < num; i++) {
-            totalObstacleCount++;
-            int group = (int) totalObstacleCount % 2;
-            Obstacle obstacle = factory.createRandomObstacle(getResources(), group);
-            obstacle.setObject_width(getWidth());
-            obstacle.setGroup(group);
-            obstacle.setObject_x((float) (getWidth() + Math.random() * 100));
-            obstacle.setObject_y(group == 0 ? GameConstant.PLAYER1_START_GROUND_Y - obstacle.getObject_height()
-                    : GameConstant.PLAYER2_START_GROUND_Y - obstacle.getObject_height());
-            if (group == 0) {
-                obstacleUpList.add(obstacle);
-            } else {
-                obstacleDownList.add(obstacle);
-            }
-
-            Log.d(TAG, "produce dragon: w,h:" + obstacle.getObject_width() + "*" + obstacle.getObject_height()
-                    + ",group:" + obstacle.getGroup() + ",total leftObstacleCount:" + leftObstacleCount
-                    + ",rightObstacleCount:" + rightObstacleCount + ", total:" + totalObstacleCount);
+    private synchronized void produceNewObstacle(int group) {
+        Obstacle obstacle = factory.createRandomObstacle(getResources(), group);
+        obstacle.setObject_width(getWidth());
+        obstacle.setGroup(group);
+        obstacle.setObject_x((float) (getWidth() - Math.random() * 150));
+        obstacle.setObject_y(group == 0 ? GameConstant.PLAYER1_START_GROUND_Y - obstacle.getObject_height()
+                : GameConstant.PLAYER2_START_GROUND_Y - obstacle.getObject_height());
+        if (group == 0) {
+            obstacleUpList.add(obstacle);
+        } else {
+            obstacleDownList.add(obstacle);
         }
+
+        Log.d(TAG, "produce dragon: w,h:" + obstacle.getObject_width() + "*" + obstacle.getObject_height()
+                + ",group:" + obstacle.getGroup() + ",total leftObstacleCount:" + leftObstacleCount
+                + ",rightObstacleCount:" + rightObstacleCount + ", total:" + totalObstacleCount);
     }
 
     public GameView(Context context) {
@@ -240,23 +239,7 @@ public class GameView extends View {
 
     }
 
-
-    public void setAnalyzeResult(InferResult inferResult) {
-
-        if (System.currentTimeMillis() - prevCheckPlayerScoreTime > CHECK_GET_SCORE_JUDGE_TIME) {
-            prevCheckPlayerScoreTime = System.currentTimeMillis();
-            checkPlayerFired(inferResult);
-        }
-
-        invalidate();
-    }
-
-    private void checkBlock() {
-
-    }
-
-    private synchronized void checkPlayerFired(InferResult inferResult) {
-        // nine emotion 0 angry 1 disgust 2 happy 3 sad 4 surprise 5 fear 6 neutral 7 contempt 8 confused
+    private synchronized void setPlayerFired(InferResult inferResult) {
         if (inferResult == null) {
             return;
         }
@@ -274,6 +257,32 @@ public class GameView extends View {
             playerDragonDown.setFiring(false);
             playerDragonUp.setFiring(false);
         }
+    }
+
+    public void setAnalyzeResult(InferResult inferResult) {
+
+        if (System.currentTimeMillis() - prevCheckPlayerScoreTime > CHECK_GET_SCORE_JUDGE_TIME) {
+            prevCheckPlayerScoreTime = System.currentTimeMillis();
+            setPlayerFired(inferResult);
+        }
+
+        invalidate();
+    }
+
+    public Player getPlayerUp() {
+        return playerUp;
+    }
+
+    public void setPlayerUp(Player playerUp) {
+        this.playerUp = playerUp;
+    }
+
+    public Player getPlayerDown() {
+        return playerDown;
+    }
+
+    public void setPlayerDown(Player playerDown) {
+        this.playerDown = playerDown;
     }
 
     public void initBitmap() {
