@@ -90,7 +90,6 @@ public class GameActivity extends AppCompatActivity {
     private Player playerLeft, playerRight;
     private int matchId;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,9 +100,19 @@ public class GameActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Bundle bundle = getIntent().getExtras();
-        playerLeft = bundle.getParcelable(StartActivity.BUNDLE_PLAY_LEFT);
-        playerRight = bundle.getParcelable(StartActivity.BUNDLE_PLAY_RIGHT);
-        matchId = bundle.getInt(BUNDLE_MATCH_ID);
+        if (bundle == null || playerLeft == null || playerRight == null) {
+            playerRight = new Player();
+            playerRight.setGroup(1);
+            playerLeft = new Player();
+            playerLeft.setGroup(0);
+            matchId = 9527;
+        } else {
+
+            playerLeft = bundle.getParcelable(StartActivity.BUNDLE_PLAY_LEFT);
+            playerRight = bundle.getParcelable(StartActivity.BUNDLE_PLAY_RIGHT);
+
+            matchId = bundle.getInt(BUNDLE_MATCH_ID);
+        }
 
         camerBlock.setVisibility(View.INVISIBLE);
 
@@ -114,7 +123,7 @@ public class GameActivity extends AppCompatActivity {
 
         mCameraView = (JavaCameraView) findViewById(R.id.camera_impl);
 
-        IntelliEyeCoreManager.getInstance().init(this, false, true, false, false, false);
+        IntelliEyeCoreManager.getInstance().init(this, true, false, false, false, false);
 
         mCameraView.setCvCameraViewListener(new CameraFrameProcessor());
         startReadyGame();
@@ -175,9 +184,9 @@ public class GameActivity extends AppCompatActivity {
         imgEnd.setVisibility(View.INVISIBLE);
         imgReady.setVisibility(View.INVISIBLE);
 
-        gameView = new GameView(this, sounds);
-        gameView.setPlayerLeft(playerLeft);
-        gameView.setPlayerRight(playerRight);
+        gameView = new GameView(this);
+        gameView.setPlayerUp(playerLeft);
+        gameView.setPlayerDown(playerRight);
         rootRel.addView(gameView, 1);
         isPlaying = true;
         new Thread(new Runnable() {
@@ -220,8 +229,8 @@ public class GameActivity extends AppCompatActivity {
 
                                     }
                                     imgPreview.setImageBitmap(bmpPreview);
-                                    txtPlayerLeft.setText("X" + gameView.getPlayerLeft().getScore());
-                                    txtPlayerRight.setText("X" + gameView.getPlayerRight().getScore());
+                                    txtPlayerLeft.setText("X" + gameView.getPlayerUp().getScore());
+                                    txtPlayerRight.setText("X" + gameView.getPlayerDown().getScore());
                                 }
                             }
                         });
@@ -239,8 +248,8 @@ public class GameActivity extends AppCompatActivity {
             public void run() {
                 Intent intent = new Intent(getApplicationContext(), FinishActivity.class);
                 Bundle bundle = new Bundle();
-                playerLeft.setScore(gameView.getPlayerLeft().getScore());
-                playerRight.setScore(gameView.getPlayerRight().getScore());
+                playerLeft.setScore(gameView.getPlayerUp().getScore());
+                playerRight.setScore(gameView.getPlayerDown().getScore());
                 bundle.putParcelable(BUNDLE_PLAY_LEFT, playerLeft);
                 bundle.putParcelable(BUNDLE_PLAY_RIGHT, playerRight);
                 bundle.putInt(BUNDLE_MATCH_ID, matchId);

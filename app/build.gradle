@@ -32,10 +32,19 @@ android {
 
     buildTypes {
         release {
+            minifyEnabled false
             signingConfig signingConfigs.release
-            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            android.applicationVariants.all { variant ->
+                renameReleaseAPK(variant, 'release')
+            }
         }
+        debug {
+            android.applicationVariants.all { variant ->
+                renameDebugAPK(variant, 'debug')
+            }
+        }
+
     }
 }
 
@@ -65,4 +74,30 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 // For Kotlin use kapt instead of annotationProcessor
+}
+
+def renameReleaseAPK(variant, buildType) {
+    variant.outputs.each { output ->
+//        def formattedDate = new Date().format('yyyy_MM_dd_HH_mm')
+        def formattedDate = new Date().format('yyyy_MM_dd_HH')
+        def newName = output.outputFile.name
+        newName = newName.replace("app-", "TRexRunning-") //"MyAppName" -> I set my app variables in the root project
+        newName = newName.replace("-release", "-" + "v" + android.defaultConfig.versionName + "-"
+                + formattedDate + "-"
+                + buildType)
+        output.outputFileName = new File("./../../apk", newName);
+    }
+}
+
+def renameDebugAPK(variant, buildType) {
+    variant.outputs.each { output ->
+//        def formattedDate = new Date().format('yyyy_MM_dd_HH_mm')
+        def formattedDate = new Date().format('yyyy_MM_dd_HH')
+        def newName = output.outputFile.name
+        newName = newName.replace("app-", "TRexRunning-") //"MyAppName" -> I set my app variables in the root project
+        newName = newName.replace("-debug", "-" + "v" + android.defaultConfig.versionName + "-"
+                + formattedDate + "-"
+                + buildType)
+        output.outputFileName = new File("./../../apk", newName);
+    }
 }

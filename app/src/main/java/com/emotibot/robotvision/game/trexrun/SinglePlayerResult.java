@@ -6,7 +6,15 @@ public class SinglePlayerResult {
     int pos_x = -1;
     int pos_y = -1;
     int width, height;
+    boolean isLipOpen = false;
 
+    public boolean isLipOpen() {
+        return isLipOpen;
+    }
+
+    public void setLipOpen(boolean lipOpen) {
+        isLipOpen = lipOpen;
+    }
 
     public int getPositionIndex() {
         return positionIndex;

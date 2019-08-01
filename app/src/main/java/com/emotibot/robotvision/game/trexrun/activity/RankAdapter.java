@@ -44,7 +44,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.RankViewHolder
         Player player = playerList.get(position);
         holder.txtName.setText(player.getName());
         holder.txtOrder.setText((position + 1) + ".");
-        holder.txtScore.setText(player.getScore() + "只");
+        holder.txtScore.setText(player.getScore() + "公尺");
     }
 
     @Override

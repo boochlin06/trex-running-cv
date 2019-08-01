@@ -12,10 +12,19 @@ public class PlayerDragon extends Dragon {
 
     @Override
     protected void initBitmap() {
-        defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_dragon_neutral_1);
-        default2Bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_dragon_neutral_2);
-        fireBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_dragon_neutral_save);
-        speed = 7;
+        if (getGroup() == 0) {
+            defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_dragon_blue_run_1);
+            default2Bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_dragon_blue_run_2);
+            firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_dragon_blue_fired);
+            fired2Bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_dragon_blue_fired_2);
+        } else {
+            defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_dragon_dark_run_1);
+            default2Bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_dragon_dark_run_2);
+            firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_dragon_dark_fired);
+            fired2Bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_dragon_dark_fired_2);
+        }
+        setObject_height(defaultBitmap.getHeight());
+        setObject_width(defaultBitmap.getWidth());
     }
 
     @Override
@@ -23,31 +32,12 @@ public class PlayerDragon extends Dragon {
         if (!defaultBitmap.isRecycled()) {
             defaultBitmap.recycle();
         }
-        if (!fireBitmap.isRecycled()) {
-            fireBitmap.recycle();
+        if (!default2Bitmap.isRecycled()) {
+            defaultBitmap.recycle();
+        }
+        if (!firedBitmap.isRecycled()) {
+            firedBitmap.recycle();
         }
     }
-
-
-//    public void drawSelf(Canvas canvas) {
-//        if (isAlive()) {
-//
-//            if (System.currentTimeMillis() - getKeepScoreTime() < 100) {
-//                canvas.drawBitmap(scoreBitmap, object_x, object_y, paint);
-//            } else {
-//
-//                canvas.drawBitmap(fireBitmap, object_x, object_y, paint);
-//            }
-//            if (object_y + fireBitmap.getHeight() >= screen_height - 20) {
-//                object_y = screen_height - fireBitmap.getHeight();
-//                object_x = object_x + 10;
-//            } else {
-//                object_y = object_y + speed;
-//            }
-//        } else {
-//            canvas.drawBitmap(defaultBitmap, object_x, object_y, paint);
-//            object_y = object_y + speed;
-//        }
-//    }
 
 }

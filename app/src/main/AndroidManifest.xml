@@ -14,18 +14,15 @@
     <application
         android:name="com.emotibot.robotvision.game.trexrun.TrexApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_robot_vision"
+        android:icon="@mipmap/ic_trex_run_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_robot_vision"
+        android:roundIcon="@mipmap/ic_trex_run_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- android:screenOrientation="portrait" -->
-
-
         <activity
             android:name="com.emotibot.robotvision.game.trexrun.activity.StartActivity"
-            android:label="TREX Jump"
+            android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:taskAffinity="com.emotibot.robotvision.standardsample">
             <intent-filter>
@@ -35,23 +32,23 @@
         </activity>
         <activity
             android:name="com.emotibot.robotvision.game.trexrun.activity.GameActivity"
-            android:label="TREX Jump"
+            android:label="TREX Run game"
             android:screenOrientation="landscape"
             android:taskAffinity="com.emotibot.robotvision.standardsample">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.emotibot.robotvision.game.trexrun.activity.FinishActivity"
-            android:label="TREX Jump"
+            android:label="T@string/app_name"
             android:screenOrientation="landscape"
             android:taskAffinity="com.emotibot.robotvision.standardsample"></activity>
 
         <activity
             android:name="com.emotibot.robotvision.game.trexrun.activity.PlayerCheckActivity"
-            android:label="TREX Jump"
+            android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:taskAffinity="com.emotibot.robotvision.standardsample"></activity>
     </application>

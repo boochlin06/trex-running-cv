@@ -9,14 +9,15 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcyRank"
 
-        android:layout_width="320dp"
+        android:layout_width="250dp"
         android:layout_height="400dp"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="68dp"
         android:layout_marginRight="20dp"
         android:clipToPadding="false"
-        android:paddingTop="145dp"
+        android:paddingTop="75dp"
         android:scrollbars="vertical"
+        android:background="@drawable/bg_ranking"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:context="com.google.samples.apps.sunflower.GardenActivity"
         tools:listitem="@layout/item_rank">

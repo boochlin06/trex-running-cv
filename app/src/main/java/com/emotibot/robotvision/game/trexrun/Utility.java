@@ -2,9 +2,11 @@ package com.emotibot.robotvision.game.trexrun;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.View;
 
 import com.emotibot.intellieyecoreaar.InferResult;
+import com.emotibot.robotvision.game.trexrun.Constants.GameConstant;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,20 +18,9 @@ public class Utility {
         ArrayList<SinglePlayerResult> playerResults = new ArrayList<>();
         SinglePlayerResult player1 = new SinglePlayerResult();
         SinglePlayerResult player2 = new SinglePlayerResult();
-        if (inferResult.getFaceBox()[0] != 0) {
-            int firstAt = -1;
-            float max = 0;
-            for (int i = 0; i < inferResult.getEmotionData().length / 2; i++) {
-
-                float emotion = inferResult.getEmotionData()[i];
-                if (emotion > max) {
-                    max = emotion;
-                    firstAt = i;
-                }
-            }
-            if (firstAt != -1) {
-                player1.setEmotionIndex(firstAt);
-            }
+        if (inferResult.getFaceBox()[0] != 0 && inferResult.getLipPoints()[0] != 0) {
+            float[] lipPoints = inferResult.getLipPoints();
+            player1.setLipOpen(lipPoints[3] - lipPoints[1] > GameConstant.PLAY_LIP_OPEN_LIMIT);
             player1.setPos_x(inferResult.getFaceBox()[0]);
             player1.setPos_y(inferResult.getFaceBox()[1]);
             player1.setWidth(inferResult.getFaceBox()[2]);
@@ -37,20 +28,11 @@ public class Utility {
             player1.setPositionIndex(0);
             playerResults.add(player1);
         }
-        if (inferResult.getFaceBox()[inferResult.getFaceBox().length / 2] != 0) {
-            int firstAt = -1;
-            float max = 0;
-            for (int i = inferResult.getEmotionData().length / 2; i < inferResult.getEmotionData().length; i++) {
+        if (inferResult.getFaceBox()[inferResult.getFaceBox().length / 2] != 0 && inferResult.getLipPoints()[4] != 0) {
 
-                float emotion = inferResult.getEmotionData()[i];
-                if (emotion > max) {
-                    max = emotion;
-                    firstAt = i;
-                }
-            }
-            if (firstAt != -1) {
-                player2.setEmotionIndex(firstAt);
-            }
+            float[] lipPoints = inferResult.getLipPoints();
+            player2.setLipOpen(lipPoints[7] - lipPoints[5] > GameConstant.PLAY_LIP_OPEN_LIMIT);
+
             player2.setPos_x(inferResult.getFaceBox()[inferResult.getFaceBox().length / 2]);
             player2.setPos_y(inferResult.getFaceBox()[inferResult.getFaceBox().length / 2 + 1]);
             player2.setWidth(inferResult.getFaceBox()[inferResult.getFaceBox().length / 2 + 2]);

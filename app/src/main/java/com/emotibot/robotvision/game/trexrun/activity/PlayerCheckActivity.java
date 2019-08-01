@@ -92,7 +92,7 @@ public class PlayerCheckActivity extends AppCompatActivity {
         txtPlayerLeft.setText(getString(R.string.player_icon_checking));
         txtPlayerRight.setText(getString(R.string.player_icon_checking));
 
-        IntelliEyeCoreManager.getInstance().init(this, false, true, false, false, false);
+        IntelliEyeCoreManager.getInstance().init(this, true, true, false, false, false);
         cameraImpl.setCvCameraViewListener(new CameraFrameProcessor());
 
     }
@@ -150,6 +150,7 @@ public class PlayerCheckActivity extends AppCompatActivity {
 
             if (System.currentTimeMillis() - prevProcessorTime > PLAYER_CHECK_GAP && (!isCheckLeftDone || !isCheckRightDone)) {
                 prevProcessorTime = System.currentTimeMillis();
+
                 checkPlayerStatus(mInferResult, cameraFrame.cols());
 
                 if (isCheckLeftDone && isCheckRightDone) {
@@ -169,7 +170,7 @@ public class PlayerCheckActivity extends AppCompatActivity {
                 }
             }
             if (isCheckLeftDone && isCheckRightDone)
-                return doneFrame;
+                return null;
             else
                 return cameraFrame;
         }
