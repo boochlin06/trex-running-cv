@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.media.MediaPlayer;
-import android.util.Log;
 import android.view.View;
 
 import com.emotibot.intellieyecoreaar.InferResult;
@@ -28,7 +26,6 @@ import static com.emotibot.robotvision.game.trexrun.Constants.GameConstant.PRODU
 public class GameView extends View {
     public static String TAG = GameView.class.getSimpleName();
 
-    private MediaPlayer mMediaPlayer;
     private GameObjectFactory factory;
     private Paint paint;
 
@@ -39,9 +36,6 @@ public class GameView extends View {
 
     private long prevCheckPlayerScoreTime = 0;
 
-    private int rightObstacleCount = 0;
-    private int leftObstacleCount = 0;
-    private int totalObstacleCount = 0;
     private Bitmap backgroundCloudTop;
     private Bitmap backgroundCloudDown;
     private int cloudUpX1 = 0, cloudUpX2;
@@ -203,9 +197,9 @@ public class GameView extends View {
             obstacleDownList.add(obstacle);
         }
 
-        Log.d(TAG, "produce dragon: w,h:" + obstacle.getObject_width() + "*" + obstacle.getObject_height()
-                + ",group:" + obstacle.getGroup() + ",total leftObstacleCount:" + leftObstacleCount
-                + ",rightObstacleCount:" + rightObstacleCount + ", total:" + totalObstacleCount);
+//        Log.d(TAG, "produce dragon: w,h:" + obstacle.getObject_width() + "*" + obstacle.getObject_height()
+//                + ",group:" + obstacle.getGroup() + ",total leftObstacleCount:" + leftObstacleCount
+//                + ",rightObstacleCount:" + rightObstacleCount + ", total:" + totalObstacleCount);
     }
 
     public GameView(Context context) {

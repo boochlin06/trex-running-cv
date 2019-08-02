@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
@@ -32,6 +33,7 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,8 +57,6 @@ public class FinishActivity extends AppCompatActivity {
     @BindView(R.id.imageViewQRCode)
     GifImageView imageViewQRCode;
 
-    @BindView(R.id.imageDiamond)
-    ImageView imageDiamond;
     @BindView(R.id.imageViewWinnerCenter)
     CircleImageView imageViewWinnerCenter;
 
@@ -66,13 +66,15 @@ public class FinishActivity extends AppCompatActivity {
     ImageView imageViewWinnerRight;
     @BindView(R.id.linearLayoutWinner)
     LinearLayout linearLayoutWinner;
-    @BindView(R.id.linearLayoutWinnerBorder)
-    LinearLayout linearLayoutWinnerBorder;
 
     @BindView(R.id.buttonSubmitName)
     Button buttonSubmitName;
     @BindView(R.id.editTextName)
     EditText editTextName;
+    @BindView(R.id.textViewConclusionRank)
+    TextView textViewConclusionRank;
+    @BindView(R.id.rootConstraint)
+    ConstraintLayout rootConstraint;
 
 
     private MainPlayerDataSource mMainPlayerDataSource;
@@ -98,9 +100,20 @@ public class FinishActivity extends AppCompatActivity {
 
 
         Bundle bundle = getIntent().getExtras();
-        playerLeft = (Player) bundle.getParcelable(StartActivity.BUNDLE_PLAY_LEFT);
-        playerRight = (Player) bundle.getParcelable(StartActivity.BUNDLE_PLAY_RIGHT);
-        matchId = bundle.getInt(BUNDLE_MATCH_ID);
+        if (bundle == null) {
+            playerRight = new Player();
+            playerRight.setGroup(1);
+            playerRight.setScore(121);
+            playerLeft = new Player();
+            playerLeft.setGroup(0);
+            playerLeft.setScore(121);
+            matchId = 9527;
+        } else {
+            playerLeft = bundle.getParcelable(StartActivity.BUNDLE_PLAY_LEFT);
+            playerRight = bundle.getParcelable(StartActivity.BUNDLE_PLAY_RIGHT);
+            matchId = bundle.getInt(BUNDLE_MATCH_ID);
+            Log.d(TAG, "match id:" + matchId);
+        }
 
         rankList = new ArrayList<>();
 
@@ -135,6 +148,9 @@ public class FinishActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (TextUtils.isEmpty(playerRight.getImageHead()) || TextUtils.isEmpty(playerLeft.getImageHead())) {
+                    return;
+                }
                 mMainPlayerDataSource.uploadPublicFile(new String[]{playerLeft.getImageInPlayingPath()
                         , playerLeft.getImageInFinalPath()}, Integer.toString(matchId), new PlayerDataSource.uploadPublicFileCallback() {
 
@@ -171,32 +187,33 @@ public class FinishActivity extends AppCompatActivity {
 
     private void displaySingleWinner(Player winer) {
         Log.d(TAG, "displaySingleWinner winer player" + winer.getRank() + ",path:" + winer.getImageHead());
+        rootConstraint.setBackgroundResource(R.drawable.bg_gameresult_win);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         options.inSampleSize = 4;
         Bitmap bitmap = BitmapFactory.decodeFile(winer.getImageHead(), options);
         imageViewWinnerCenter.setImageBitmap(bitmap);
-        imageDiamond.setVisibility(View.VISIBLE);
         imageViewWinnerCenter.setVisibility(View.VISIBLE);
         imageViewWinnerLeft.setVisibility(View.GONE);
         imageViewWinnerRight.setVisibility(View.GONE);
-        linearLayoutWinnerBorder.setVisibility(View.GONE);
         buttonSubmitName.setVisibility(View.VISIBLE);
         editTextName.setVisibility(View.VISIBLE);
 
-        linearLayoutWinner.setBackground(ContextCompat.getDrawable(this, R.drawable.winner_borderless));
+        linearLayoutWinner.setBackground(ContextCompat.getDrawable(this, R.drawable.border_winner_less));
 
         singleWinner = winer;
         printPlayer(winer);
 
-        textViewConclusion.setText(winer.getRank() != 0 ? getString(R.string.game_conclusion_single_winner_in_rank, winer.getScore(), winer.getRank())
-                : getString(R.string.game_conclusion_single_winner, winer.getScore()));
+        textViewConclusionRank.setText(winer.getRank() != 0 ? getString(R.string.game_conclusion_single_winner_in_rank, winer.getRank())
+                : "");
+        textViewConclusion.setText(winer.getScore() + getString(R.string.meter));
 
     }
 
 
     private void displayDoubleWinner(Player playerLeft, Player playerRight) {
         printPlayer(playerLeft);
+        rootConstraint.setBackgroundResource(R.drawable.bg_gameresult);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         options.inSampleSize = 4;
@@ -205,19 +222,17 @@ public class FinishActivity extends AppCompatActivity {
         bitmap = BitmapFactory.decodeFile(playerRight.getImageHead(), options);
         imageViewWinnerRight.setImageBitmap(bitmap);
 
-        imageDiamond.setVisibility(View.GONE);
         imageViewWinnerCenter.setVisibility(View.GONE);
         imageViewWinnerLeft.setVisibility(View.VISIBLE);
         imageViewWinnerRight.setVisibility(View.VISIBLE);
-        linearLayoutWinnerBorder.setVisibility(View.VISIBLE);
         buttonSubmitName.setVisibility(View.INVISIBLE);
         editTextName.setVisibility(View.INVISIBLE);
 
-        linearLayoutWinner.setBackground(ContextCompat.getDrawable(this, R.drawable.winner_borderless));
+        linearLayoutWinner.setBackground(ContextCompat.getDrawable(this, R.drawable.border_winner_less));
 
-        textViewConclusion.setText(playerLeft.getRank() != 0 ? getString(R.string.game_conclusion_double_winner_in_rank
-                , playerLeft.getScore(), playerLeft.getRank())
-                : getString(R.string.game_conclusion_double_winner, playerLeft.getScore()));
+        textViewConclusionRank.setText(playerLeft.getRank() != 0 ? getString(R.string.game_conclusion_single_winner_in_rank, playerLeft.getRank())
+                : "");
+        textViewConclusion.setText(playerLeft.getScore() + getString(R.string.meter));
 
     }
 

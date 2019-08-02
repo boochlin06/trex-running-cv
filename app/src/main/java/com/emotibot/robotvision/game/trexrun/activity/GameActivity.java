@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -100,7 +101,7 @@ public class GameActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Bundle bundle = getIntent().getExtras();
-        if (bundle == null || playerLeft == null || playerRight == null) {
+        if (bundle == null) {
             playerRight = new Player();
             playerRight.setGroup(1);
             playerLeft = new Player();
@@ -110,6 +111,7 @@ public class GameActivity extends AppCompatActivity {
             playerLeft = bundle.getParcelable(StartActivity.BUNDLE_PLAY_LEFT);
             playerRight = bundle.getParcelable(StartActivity.BUNDLE_PLAY_RIGHT);
             matchId = bundle.getInt(BUNDLE_MATCH_ID);
+            Log.d(TAG, "match id:" + matchId);
         }
 
         camerBlock.setVisibility(View.INVISIBLE);
@@ -123,7 +125,7 @@ public class GameActivity extends AppCompatActivity {
         mediaPlayer = MediaPlayer.create(this, R.raw.background);
         mediaPlayer.setLooping(true);
         if (!mediaPlayer.isPlaying()) {
-//            mediaPlayer.start();
+            mediaPlayer.start();
         }
     }
 

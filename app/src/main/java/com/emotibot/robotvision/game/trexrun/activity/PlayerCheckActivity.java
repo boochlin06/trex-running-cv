@@ -237,8 +237,8 @@ public class PlayerCheckActivity extends AppCompatActivity {
                     });
                 }
             }
-            Log.d(TAG, result.getPositionIndex() + ",result x:" + result.getPos_x() + ",y:" + result.getPos_y()
-                    + ",w,h:" + result.getWidth() + "*" + result.getHeight());
+//            Log.d(TAG, result.getPositionIndex() + ",result x:" + result.getPos_x() + ",y:" + result.getPos_y()
+//                    + ",w,h:" + result.getWidth() + "*" + result.getHeight());
         }
     }
 

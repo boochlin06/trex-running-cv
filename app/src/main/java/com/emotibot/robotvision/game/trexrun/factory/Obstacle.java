@@ -54,44 +54,44 @@ public class Obstacle extends GameObject {
         int type = (int) (Math.random() * 10);
         switch (type) {
             case 0:
-                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree1);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_tree1);
+                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_tree1);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_fire_tree1);
                 break;
             case 1:
-                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree2);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_tree2);
+                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_tree2);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_fire_tree2);
                 break;
             case 2:
-                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree3);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_tree3);
+                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_tree3);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_fire_tree3);
                 break;
             case 3:
-                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree4);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_tree4);
+                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_tree4);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_fire_tree4);
                 break;
             case 4:
-                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree5);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_tree5);
+                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_tree5);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_fire_tree5);
                 break;
             case 5:
-                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.tree6);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_tree6);
+                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_tree6);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_fire_tree6);
                 break;
             case 6:
-                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.car1);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_car);
+                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_car1);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_fire_car);
                 break;
             case 7:
-                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.car2);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_car);
+                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_car2);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_fire_car);
                 break;
             case 8:
-                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.car3);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_car);
+                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_car3);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_fire_car);
                 break;
             case 9:
-                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.car4);
-                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.fire_car);
+                defaultBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_car4);
+                firedBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_fire_car);
                 break;
 
         }

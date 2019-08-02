@@ -23,8 +23,7 @@
         <activity
             android:name="com.emotibot.robotvision.game.trexrun.activity.StartActivity"
             android:label="@string/app_name"
-            android:screenOrientation="landscape"
-            android:taskAffinity="com.emotibot.robotvision.standardsample">
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -32,20 +31,21 @@
         </activity>
         <activity
             android:name="com.emotibot.robotvision.game.trexrun.activity.GameActivity"
-            android:screenOrientation="landscape"
-            android:taskAffinity="com.emotibot.robotvision.standardsample">
-        </activity>
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name="com.emotibot.robotvision.game.trexrun.activity.FinishActivity"
-            android:label="T@string/app_name"
-            android:screenOrientation="landscape"
-            android:taskAffinity="com.emotibot.robotvision.standardsample"></activity>
+            android:label="@string/app_name"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name="com.emotibot.robotvision.game.trexrun.activity.PlayerCheckActivity"
             android:label="@string/app_name"
-            android:screenOrientation="landscape"
-            android:taskAffinity="com.emotibot.robotvision.standardsample"></activity>
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>
