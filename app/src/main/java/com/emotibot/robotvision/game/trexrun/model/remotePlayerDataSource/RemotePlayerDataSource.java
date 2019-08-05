@@ -24,9 +24,13 @@ public class RemotePlayerDataSource implements PlayerDataSource {
     private static volatile RemotePlayerDataSource mInstance;
     private RemotePlayerDataService remotePlayerDataService;
 
-    public static String DATA_BASE_URL = "http://192.168.3.63:7408";
+    public static String DATA_BASE_URL = "http://192.168.8.102:7408";
 
-    private RemotePlayerDataSource() {
+    public static void clearInstance() {
+        mInstance = null;
+    }
+
+    private RemotePlayerDataSource(String ip) {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -35,11 +39,11 @@ public class RemotePlayerDataSource implements PlayerDataSource {
         remotePlayerDataService = retrofit.create(RemotePlayerDataService.class);
     }
 
-    public static RemotePlayerDataSource getInstance() {
+    public static RemotePlayerDataSource getInstance(String ip) {
         if (mInstance == null) {
             synchronized (RemotePlayerDataSource.class) {
                 if (mInstance == null) {
-                    mInstance = new RemotePlayerDataSource();
+                    mInstance = new RemotePlayerDataSource(ip);
                 }
             }
         }

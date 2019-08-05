@@ -1,7 +1,9 @@
 package com.emotibot.robotvision.game.trexrun.model;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.emotibot.robotvision.game.trexrun.activity.SettingActivity;
 import com.emotibot.robotvision.game.trexrun.model.localPlayerDataSource.LocalPlayerDataSource;
 import com.emotibot.robotvision.game.trexrun.model.remotePlayerDataSource.RemotePlayerDataSource;
 
@@ -16,7 +18,9 @@ public class MainPlayerDataSource implements PlayerDataSource {
     private static final String TAG = MainPlayerDataSource.class.getSimpleName();
 
     private MainPlayerDataSource(Context context) {
-        remote = RemotePlayerDataSource.getInstance();
+        SharedPreferences setting = context.getSharedPreferences("setting", Context.MODE_PRIVATE);
+        String ip = setting.getString(SettingActivity.GAME_IP, RemotePlayerDataSource.DATA_BASE_URL);
+        remote = RemotePlayerDataSource.getInstance(ip);
         local = LocalPlayerDataSource.getInstance(context);
         this.context = context;
     }

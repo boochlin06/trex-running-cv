@@ -80,6 +80,7 @@ Confused:%9.2f\n
     <string name="input_name">请输入名字</string>
     <string name="scan_to_get_score">扫描分享好成绩</string>
     <string name="meter">公尺</string>
+    <string name="setting">设定</string>
 
 
 </resources>

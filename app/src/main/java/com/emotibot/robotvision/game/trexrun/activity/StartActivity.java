@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.emotibot.robotvision.game.trexrun.R;
 import com.emotibot.robotvision.game.trexrun.model.MainPlayerDataSource;
@@ -26,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -37,8 +37,8 @@ public class StartActivity extends AppCompatActivity {
     public static final String BUNDLE_PLAY_LEFT = "BUNDLE_PLAY_LEFT";
     public static final String BUNDLE_PLAY_RIGHT = "BUNDLE_PLAY_RIGHT";
     public static final String BUNDLE_MATCH_ID = "BUNDLE_MATCH_ID";
-    @BindView(R.id.txtServerIp)
-    TextView txtServerIp;
+    @BindView(R.id.btnSetting)
+    Button btnSetting;
     private PlayerDataSource mainPlayerDataSource;
 
     private RankAdapter rankAdapter;
@@ -78,7 +78,13 @@ public class StartActivity extends AppCompatActivity {
     public void gotoGameActivity(View view) {
         Intent intent = new Intent(this, PlayerCheckActivity.class);
         this.startActivity(intent);
-        finish();
+    }
+
+    @OnLongClick(R.id.btnStart)
+    public boolean gotoSettingActivity(View view) {
+        Intent intent = new Intent(this, SettingActivity.class);
+        this.startActivity(intent);
+        return true;
     }
 
     private void initRankList() {
