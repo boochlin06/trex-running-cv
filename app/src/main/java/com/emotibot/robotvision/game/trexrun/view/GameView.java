@@ -77,8 +77,8 @@ public class GameView extends View {
         obstacleDownList.removeAll(release);
         playerDragonUp.drawSelf(canvas);
         playerDragonDown.drawSelf(canvas);
-        playerUp.setScore(playerDragonUp.isMoving() ? playerUp.getScore() + 1 : playerUp.getScore());
-        playerDown.setScore(playerDragonDown.isMoving() ? playerDown.getScore() + 1 : playerDown.getScore());
+        playerUp.setScore(playerDragonUp.isMoving() ? playerUp.getScore() + speed / 10 : playerUp.getScore());
+        playerDown.setScore(playerDragonDown.isMoving() ? playerDown.getScore() + +speed / 10 : playerDown.getScore());
     }
 
     private synchronized void obstacleViewLogic() {
@@ -152,6 +152,14 @@ public class GameView extends View {
         canvas.drawBitmap(backgroundCloudDown, cloudDownX1, 900, paint);
         canvas.drawBitmap(backgroundCloudDown, cloudDownX2, 900, paint);
         viewCloudLogic();
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     public synchronized void viewCloudLogic() {

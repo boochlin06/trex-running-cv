@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.emotibot.intellieyecoreaar.InferResult;
 import com.emotibot.intellieyecoreaar.IntelliEyeCoreManager;
+import com.emotibot.robotvision.game.trexrun.Constants.GameConstant;
 import com.emotibot.robotvision.game.trexrun.R;
 import com.emotibot.robotvision.game.trexrun.Utility;
 import com.emotibot.robotvision.game.trexrun.model.Player;
@@ -222,7 +223,7 @@ public class GameActivity extends AppCompatActivity {
                                         playerRight.setImageInPlayingPath(getCacheDir() + "public-screenshot-1.jpg");
                                         playerLeft.setImageInPlayingPath(getCacheDir() + "public-screenshot-1.jpg");
                                         Utility.takeScreenshot(playerRight.getImageInPlayingPath(), GameActivity.this);
-
+                                        gameView.setSpeed((int) (GameConstant.GAMESPEED * 2));
                                     }
                                     imgPreview.setImageBitmap(bmpPreview);
                                     txtPlayerUp.setText(gameView.getPlayerUp().getScore() + "公尺");

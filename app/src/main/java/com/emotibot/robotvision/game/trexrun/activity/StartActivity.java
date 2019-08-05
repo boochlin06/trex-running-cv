@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.emotibot.robotvision.game.trexrun.R;
 import com.emotibot.robotvision.game.trexrun.model.MainPlayerDataSource;
@@ -36,6 +37,8 @@ public class StartActivity extends AppCompatActivity {
     public static final String BUNDLE_PLAY_LEFT = "BUNDLE_PLAY_LEFT";
     public static final String BUNDLE_PLAY_RIGHT = "BUNDLE_PLAY_RIGHT";
     public static final String BUNDLE_MATCH_ID = "BUNDLE_MATCH_ID";
+    @BindView(R.id.txtServerIp)
+    TextView txtServerIp;
     private PlayerDataSource mainPlayerDataSource;
 
     private RankAdapter rankAdapter;

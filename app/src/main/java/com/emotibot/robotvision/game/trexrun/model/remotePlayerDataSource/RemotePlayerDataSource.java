@@ -24,7 +24,7 @@ public class RemotePlayerDataSource implements PlayerDataSource {
     private static volatile RemotePlayerDataSource mInstance;
     private RemotePlayerDataService remotePlayerDataService;
 
-    public static final String DATA_BASE_URL = "http://192.168.3.63:7408";
+    public static String DATA_BASE_URL = "http://192.168.3.63:7408";
 
     private RemotePlayerDataSource() {
         Retrofit retrofit = new Retrofit.Builder()

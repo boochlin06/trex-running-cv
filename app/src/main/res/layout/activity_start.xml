@@ -14,10 +14,10 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="64dp"
         android:layout_marginRight="10dp"
+        android:background="@drawable/bg_ranking"
         android:clipToPadding="false"
         android:paddingTop="60dp"
         android:scrollbars="vertical"
-        android:background="@drawable/bg_ranking"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:context="com.google.samples.apps.sunflower.GardenActivity"
         tools:listitem="@layout/item_rank">
@@ -34,4 +34,15 @@
         android:layout_marginBottom="40dp"
         android:background="@drawable/btn_start" />
 
+    <TextView
+        android:id="@+id/txtServerIp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="20dp"
+        android:hint="Game server ip"
+        android:textSize="20sp"
+        android:visibility="gone"
+        tools:hint="GameServer ip" />
 </RelativeLayout>
