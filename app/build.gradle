@@ -73,7 +73,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
-// For Kotlin use kapt instead of annotationProcessor
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 }
 
 def renameReleaseAPK(variant, buildType) {

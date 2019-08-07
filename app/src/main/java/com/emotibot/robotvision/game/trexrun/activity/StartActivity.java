@@ -1,27 +1,36 @@
 package com.emotibot.robotvision.game.trexrun.activity;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.emotibot.robotvision.game.trexrun.R;
-import com.emotibot.robotvision.game.trexrun.model.MainPlayerDataSource;
-import com.emotibot.robotvision.game.trexrun.model.Player;
-import com.emotibot.robotvision.game.trexrun.model.PlayerDataSource;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.emotibot.robotvision.game.trexrun.R;
+import com.emotibot.robotvision.game.trexrun.model.MainPlayerDataSource;
+import com.emotibot.robotvision.game.trexrun.model.Player;
+import com.emotibot.robotvision.game.trexrun.model.PlayerDataSource;
+import com.emotibot.robotvision.game.trexrun.service.UploadService;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -44,6 +53,7 @@ public class StartActivity extends AppCompatActivity {
     private RankAdapter rankAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +80,16 @@ public class StartActivity extends AppCompatActivity {
                         1);
             }
         }
-
+        JobScheduler scheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        ComponentName jobService = new ComponentName(this, UploadService.class);
+        JobInfo jobInfo = new JobInfo.Builder(100012, jobService)
+                .setPeriodic(AlarmManager.INTERVAL_FIFTEEN_MINUTES)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setRequiresDeviceIdle(false)
+                .setPersisted(true)
+                .setBackoffCriteria(3000, JobInfo.BACKOFF_POLICY_LINEAR)
+                .build();
+        scheduler.schedule(jobInfo);
     }
 
 

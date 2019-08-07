@@ -18,7 +18,7 @@ public interface RemotePlayerDataService {
     Call<List<Player>> getPlayerList();
 
     @Multipart
-    @POST("/public/file")
+    @POST("/file")
     Call<UploadResponse> uploadPublic(@Part("match_id") RequestBody requestBody, @Part List<MultipartBody.Part> parts);
 
     @Multipart

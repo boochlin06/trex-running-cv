@@ -110,7 +110,6 @@ public class LocalPlayerDataSource implements PlayerDataSource {
     @Override
     public void uploadPrivateFile(String[] uploadPath, String matchId, uploadPrivateFileCallback
             callback) {
-
     }
 
     @Override

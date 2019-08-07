@@ -1,5 +1,7 @@
 package com.emotibot.robotvision.game.trexrun.model.remotePlayerDataSource;
 
+import android.util.Log;
+
 import com.emotibot.robotvision.game.trexrun.model.Player;
 import com.emotibot.robotvision.game.trexrun.model.PlayerDataSource;
 import com.emotibot.robotvision.game.trexrun.model.UploadResponse;
@@ -20,21 +22,17 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RemotePlayerDataSource implements PlayerDataSource {
 
-
+    public static final String TAG = RemotePlayerDataSource.class.getSimpleName();
     private static volatile RemotePlayerDataSource mInstance;
     private RemotePlayerDataService remotePlayerDataService;
 
-    public static String DATA_BASE_URL = "http://192.168.8.102:7408";
-
-    public static void clearInstance() {
-        mInstance = null;
-    }
+    public static final String DATA_BASE_URL = "http://poc1.emotibot.com:8115";
 
     private RemotePlayerDataSource(String ip) {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .baseUrl(DATA_BASE_URL)
+                .baseUrl(ip)
                 .build();
         remotePlayerDataService = retrofit.create(RemotePlayerDataService.class);
     }
@@ -50,8 +48,12 @@ public class RemotePlayerDataSource implements PlayerDataSource {
         return mInstance;
     }
 
+    public static void clearInstance() {
+        mInstance = null;
+    }
+
     @Override
-    public void getAllPlayerList(final PlayerListCallback callback) {
+    public void getAllPlayerList(final PlayerDataSource.PlayerListCallback callback) {
         Call<List<Player>> call = remotePlayerDataService.getPlayerList();
         call.enqueue(new Callback<List<Player>>() {
             @Override
@@ -135,37 +137,51 @@ public class RemotePlayerDataSource implements PlayerDataSource {
     @Override
     public void uploadPublicFile(String[] uploadPath, String matchId, final uploadPublicFileCallback callback) {
 
-        List<MultipartBody.Part> uploadPart = new ArrayList<>();
+        List<MultipartBody.Part> uploadPart;
         for (int i = 0; i < uploadPath.length; i++) {
-            String fromTag = "file" + (i + 1);
-            File file = new File(uploadPath[i]);
+            uploadPart = new ArrayList<>();
+            String fromTag = "file";
+            final File file = new File(uploadPath[i]);
             MultipartBody.Part part = MultipartBody.Part.createFormData(fromTag, file.getName()
                     , RequestBody.create(MediaType.parse("image/*"), file));
             uploadPart.add(part);
-        }
+            RequestBody description = RequestBody.create(MediaType.parse("text/plain"), matchId);
+            Call<UploadResponse> call = remotePlayerDataService.uploadPublic(description, uploadPart);
+            try {
+                call.enqueue(new Callback<UploadResponse>() {
+                    @Override
+                    public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
+                        if (response.isSuccessful()) {
+                            UploadResponse uploadResponse = response.body();
+                            String request_id = uploadResponse.getRequest_id();
+                            if (request_id != null) {
+                                if (file.exists()) {
+                                    if (file.delete()) {
+                                        Log.d(TAG, "file upload and delete :" + file.getPath());
+                                    } else {
+                                        Log.d(TAG, "file upload but not delete :" + file.getPath());
+                                    }
+                                }
+                                callback.onSuccess(file.getName());
+                            } else {
+                                callback.onFailure();
+                            }
 
-        RequestBody description = RequestBody.create(MediaType.parse("text/plain"), matchId);
-        Call<UploadResponse> call = remotePlayerDataService.uploadPublic(description, uploadPart);
-        try {
-            call.enqueue(new Callback<UploadResponse>() {
-                @Override
-                public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
-                    UploadResponse uploadResponse = response.body();
-                    String qrCodeB64String = uploadResponse.getData();
-                    if (qrCodeB64String != null) {
-                        callback.onSuccess(qrCodeB64String);
-                    } else {
+                        } else {
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UploadResponse> call, Throwable t) {
+                        t.printStackTrace();
+                        Log.e(TAG, "uploadPublicFile failure" + file.getPath() + t.getMessage());
                         callback.onFailure();
                     }
-                }
-
-                @Override
-                public void onFailure(Call<UploadResponse> call, Throwable t) {
-                    callback.onFailure();
-                }
-            });
-        } catch (Exception e) {
-            callback.onFailure();
+                });
+            } catch (Exception e) {
+                callback.onFailure();
+            }
         }
 
     }

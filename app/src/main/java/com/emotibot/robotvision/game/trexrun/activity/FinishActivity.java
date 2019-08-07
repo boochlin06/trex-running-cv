@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,20 +20,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+
 import com.emotibot.robotvision.game.trexrun.R;
 import com.emotibot.robotvision.game.trexrun.Utility;
 import com.emotibot.robotvision.game.trexrun.model.MainPlayerDataSource;
 import com.emotibot.robotvision.game.trexrun.model.Player;
 import com.emotibot.robotvision.game.trexrun.model.PlayerDataSource;
+import com.google.zxing.BarcodeFormat;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -84,6 +87,7 @@ public class FinishActivity extends AppCompatActivity {
     private List<Player> rankList;
 
     private Player playerLeft, playerRight, singleWinner;
+    public static final String QR_CODE_URL = "http://poc1.emotibot.com:8115/huawei-dev-conf-2019-game/index.html?match_id=";
 
     @SuppressLint("StringFormatMatches")
     @Override
@@ -97,7 +101,6 @@ public class FinishActivity extends AppCompatActivity {
         handler = new Handler();
         editTextName.addTextChangedListener(mTextWatcher);
         editTextName.setOnEditorActionListener(mOnEditorActionListener);
-
 
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) {
@@ -140,11 +143,13 @@ public class FinishActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                playerLeft.setImageInFinalPath(getCacheDir() + "public-screenshot-2.jpg");
-                playerRight.setImageInFinalPath(getCacheDir() + "public-screenshot-2.jpg");
+                File savePath = new File(getCacheDir(), (matchId + "_1.jpg"));
+                playerRight.setImageInFinalPath(savePath.getPath());
+                playerLeft.setImageInFinalPath(savePath.getPath());
                 Utility.takeScreenshot(playerLeft.getImageInFinalPath(), FinishActivity.this);
             }
-        }, 500);
+        }, 100);
+        textViewScan.setVisibility(View.INVISIBLE);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -153,13 +158,10 @@ public class FinishActivity extends AppCompatActivity {
                 }
                 mMainPlayerDataSource.uploadPublicFile(new String[]{playerLeft.getImageInPlayingPath()
                         , playerLeft.getImageInFinalPath()}, Integer.toString(matchId), new PlayerDataSource.uploadPublicFileCallback() {
-
                     @Override
                     public void onSuccess(String qrCodeB64String) {
                         Log.d(TAG, "imageViewQRCode SUCCESS");
-                        byte[] decodedString = Base64.decode(qrCodeB64String, Base64.DEFAULT);
-                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                        imageViewQRCode.setImageBitmap(decodedByte);
+                        imageViewQRCode.setImageBitmap(genCode(QR_CODE_URL + matchId));
                         textViewScan.setVisibility(View.VISIBLE);
                     }
 
@@ -170,6 +172,38 @@ public class FinishActivity extends AppCompatActivity {
                 });
             }
         }, 1000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        File file = new File(playerLeft.getImageHead());
+        if (file.exists()) {
+            if (file.delete()) {
+                Log.d(TAG, "playerLeft header image delete :" + file.getPath());
+            } else {
+                Log.d(TAG, "playerLeft header image not delete :" + file.getPath());
+            }
+        }
+        file = new File(playerRight.getImageHead());
+        if (file.exists()) {
+            if (file.delete()) {
+                Log.d(TAG, "playerRight header image delete :" + file.getPath());
+            } else {
+                Log.d(TAG, "playerRight header image not delete :" + file.getPath());
+            }
+        }
+    }
+
+    public Bitmap genCode(String content) {
+        try {
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.encodeBitmap(content, BarcodeFormat.QR_CODE, 600, 600);
+            return bitmap;
+        } catch (Exception e) {
+
+        }
+        return null;
     }
 
     private void printPlayer(Player player) {
@@ -198,12 +232,9 @@ public class FinishActivity extends AppCompatActivity {
         imageViewWinnerRight.setVisibility(View.GONE);
         buttonSubmitName.setVisibility(View.VISIBLE);
         editTextName.setVisibility(View.VISIBLE);
-
         linearLayoutWinner.setBackground(ContextCompat.getDrawable(this, R.drawable.border_winner_less));
-
         singleWinner = winer;
         printPlayer(winer);
-
         textViewConclusionRank.setText(winer.getRank() != 0 ? getString(R.string.game_conclusion_single_winner_in_rank, winer.getRank())
                 : "");
         textViewConclusion.setText(winer.getScore() + getString(R.string.meter));
@@ -221,19 +252,15 @@ public class FinishActivity extends AppCompatActivity {
         imageViewWinnerLeft.setImageBitmap(bitmap);
         bitmap = BitmapFactory.decodeFile(playerRight.getImageHead(), options);
         imageViewWinnerRight.setImageBitmap(bitmap);
-
         imageViewWinnerCenter.setVisibility(View.GONE);
         imageViewWinnerLeft.setVisibility(View.VISIBLE);
         imageViewWinnerRight.setVisibility(View.VISIBLE);
         buttonSubmitName.setVisibility(View.INVISIBLE);
         editTextName.setVisibility(View.INVISIBLE);
-
         linearLayoutWinner.setBackground(ContextCompat.getDrawable(this, R.drawable.border_winner_less));
-
         textViewConclusionRank.setText(playerLeft.getRank() != 0 ? getString(R.string.game_conclusion_single_winner_in_rank, playerLeft.getRank())
                 : "");
         textViewConclusion.setText(playerLeft.getScore() + getString(R.string.meter));
-
     }
 
     private TextView.OnEditorActionListener mOnEditorActionListener = new TextView.OnEditorActionListener() {

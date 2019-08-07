@@ -14,7 +14,6 @@ public class MainPlayerDataSource implements PlayerDataSource {
 
     private PlayerDataSource remote;
     private PlayerDataSource local;
-    private Context context;
     private static final String TAG = MainPlayerDataSource.class.getSimpleName();
 
     private MainPlayerDataSource(Context context) {
@@ -22,7 +21,6 @@ public class MainPlayerDataSource implements PlayerDataSource {
         String ip = setting.getString(SettingActivity.GAME_IP, RemotePlayerDataSource.DATA_BASE_URL);
         remote = RemotePlayerDataSource.getInstance(ip);
         local = LocalPlayerDataSource.getInstance(context);
-        this.context = context;
     }
 
     public static MainPlayerDataSource getInstance(Context context) {

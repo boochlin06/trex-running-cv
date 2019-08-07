@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.emotibot.intellieyecoreaar.InferResult;
 import com.emotibot.intellieyecoreaar.IntelliEyeCoreManager;
 import com.emotibot.robotvision.game.trexrun.Constants.GameConstant;
@@ -28,8 +31,8 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import java.io.File;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -220,8 +223,9 @@ public class GameActivity extends AppCompatActivity {
                                         gameView.setAnalyzeResult(mInferResult);
                                     if (playTime == GAME_TIME_LIMIT / 2 && !isScreenTaked) {
                                         isScreenTaked = true;
-                                        playerRight.setImageInPlayingPath(getCacheDir() + "public-screenshot-1.jpg");
-                                        playerLeft.setImageInPlayingPath(getCacheDir() + "public-screenshot-1.jpg");
+                                        File savePath = new File(getCacheDir(), (matchId + "_0.jpg"));
+                                        playerRight.setImageInPlayingPath(savePath.getPath());
+                                        playerLeft.setImageInPlayingPath(savePath.getPath());
                                         Utility.takeScreenshot(playerRight.getImageInPlayingPath(), GameActivity.this);
                                         gameView.setSpeed((int) (GameConstant.GAMESPEED * 2));
                                     }
