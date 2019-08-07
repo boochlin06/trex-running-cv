@@ -44,7 +44,7 @@
             tools:text="@string/player_icon_checking" />
 
         <TextView
-            android:id="@+id/txtPlayerRight"
+            android:id="@+id/txtPlayerDown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

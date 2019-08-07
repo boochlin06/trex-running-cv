@@ -53,33 +53,37 @@ public class GameView extends View {
         if (playerDragonDown.isMoving() && playerDown.getScore() % PRODUCE_OBSTACLE_DISTANCE_GAP == 0) {
             produceNewObstacle(1);
         }
-        obstacleViewLogic();
-
-        List<Obstacle> release = new ArrayList();
-        for (int i = 0; i < obstacleUpList.size(); i++) {
-            Obstacle obstacle = obstacleUpList.get(i);
-            obstacle.drawSelf(canvas);
-            if (obstacle.isObjectRecyclable()) {
-                release.add(obstacle);
-                obstacle.release();
-            }
-        }
-        release = new ArrayList();
-        obstacleUpList.removeAll(release);
-        for (int i = 0; i < obstacleDownList.size(); i++) {
-            Obstacle obstacle = obstacleDownList.get(i);
-            obstacle.drawSelf(canvas);
-            if (obstacle.isObjectRecyclable()) {
-                release.add(obstacle);
-                obstacle.release();
-            }
-        }
-        obstacleDownList.removeAll(release);
         synchronized (GameView.this) {
+            obstacleViewLogic();
+
+            List<Obstacle> release = new ArrayList();
+            for (int i = 0; i < obstacleUpList.size(); i++) {
+                Obstacle obstacle = obstacleUpList.get(i);
+                obstacle.drawSelf(canvas);
+                if (obstacle.isObjectRecyclable()) {
+                    release.add(obstacle);
+                    obstacle.release();
+                }
+            }
+            release = new ArrayList();
+            obstacleUpList.removeAll(release);
+            for (int i = 0; i < obstacleDownList.size(); i++) {
+                Obstacle obstacle = obstacleDownList.get(i);
+                obstacle.drawSelf(canvas);
+                if (obstacle.isObjectRecyclable()) {
+                    release.add(obstacle);
+                    obstacle.release();
+                }
+            }
+            obstacleDownList.removeAll(release);
             playerDragonUp.drawSelf(canvas);
             playerDragonDown.drawSelf(canvas);
-            playerUp.setScore(playerDragonUp.isMoving() ? playerUp.getScore() + speed / 10 : playerUp.getScore());
-            playerDown.setScore(playerDragonDown.isMoving() ? playerDown.getScore() + +speed / 10 : playerDown.getScore());
+            if (playerDragonUp.isMoving()) {
+                playerUp.setScore(playerUp.getScore() + 1);
+            }
+            if (playerDragonDown.isMoving()) {
+                playerDown.setScore(playerDown.getScore() + 1);
+            }
         }
     }
 
@@ -225,14 +229,15 @@ public class GameView extends View {
         sceenHeight = getHeight();
         screenWidth = getWidth();
         playerUp = new Player();
+        playerUp.setGroup(0);
         playerDown = new Player();
+        playerDown.setGroup(1);
         playerDragonUp = new PlayerDragon(context.getResources(), 0);
         playerDragonUp.setObject_y(GameConstant.PLAYER1_START_GROUND_Y - playerDragonUp.getObject_height());
         playerDragonUp.setObject_x(GameConstant.PLAYER_START_X);
         playerDragonDown = new PlayerDragon(context.getResources(), 1);
         playerDragonDown.setObject_y(GameConstant.PLAYER2_START_GROUND_Y - playerDragonDown.getObject_height());
         playerDragonDown.setObject_x(GameConstant.PLAYER_START_X);
-
         factory = new GameObjectFactory();
         obstacleUpList = new ArrayList<>();
         obstacleDownList = new ArrayList<>();
@@ -248,12 +253,11 @@ public class GameView extends View {
             return;
         }
         List<SinglePlayerResult> playerResults = Utility.splitInferResultToPlayer(inferResult);
-
         for (int j = 0; j < playerResults.size(); j++) {
             SinglePlayerResult player = playerResults.get(j);
             if (player.getPositionIndex() == 0) {
                 playerDragonUp.setFiring(player.isLipOpen());
-            } else {
+            } else if (player.getPositionIndex() == 1) {
                 playerDragonDown.setFiring(player.isLipOpen());
             }
         }
@@ -263,13 +267,11 @@ public class GameView extends View {
         }
     }
 
-    public void setAnalyzeResult(InferResult inferResult) {
-
+    public synchronized void setAnalyzeResult(InferResult inferResult) {
         if (System.currentTimeMillis() - prevCheckPlayerScoreTime > CHECK_GET_SCORE_JUDGE_TIME) {
             prevCheckPlayerScoreTime = System.currentTimeMillis();
             setPlayerFired(inferResult);
         }
-
         invalidate();
     }
 

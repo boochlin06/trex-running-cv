@@ -80,7 +80,7 @@ public class Player implements Parcelable {
     }
 
     @Ignore
-    private int group; // 0 is left , 1 is right;
+    private int group = -1; // 0 is left , 1 is right;
 
     public Player() {
 

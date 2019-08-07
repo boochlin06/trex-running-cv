@@ -48,7 +48,7 @@ public class PlayerCheckActivity extends AppCompatActivity {
     JavaCameraView cameraImpl;
     @BindView(R.id.txtPlayerUp)
     TextView txtPlayerLeft;
-    @BindView(R.id.txtPlayerRight)
+    @BindView(R.id.txtPlayerDown)
     TextView txtPlayerRight;
     @BindView(R.id.txtGameId)
     TextView txtGameId;

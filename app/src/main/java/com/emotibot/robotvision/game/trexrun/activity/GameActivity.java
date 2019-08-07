@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.emotibot.intellieyecoreaar.InferResult;
 import com.emotibot.intellieyecoreaar.IntelliEyeCoreManager;
-import com.emotibot.robotvision.game.trexrun.Constants.GameConstant;
 import com.emotibot.robotvision.game.trexrun.R;
 import com.emotibot.robotvision.game.trexrun.Utility;
 import com.emotibot.robotvision.game.trexrun.model.Player;
@@ -76,8 +75,8 @@ public class GameActivity extends AppCompatActivity {
     ImageView imgEnd;
     @BindView(R.id.txtPlayerUp)
     TextView txtPlayerUp;
-    @BindView(R.id.txtPlayerRight)
-    TextView txtPlayerRight;
+    @BindView(R.id.txtPlayerDown)
+    TextView txtPlayerDown;
 
     private Mat mCameraBuffer = null;
 
@@ -227,11 +226,10 @@ public class GameActivity extends AppCompatActivity {
                                         playerRight.setImageInPlayingPath(savePath.getPath());
                                         playerLeft.setImageInPlayingPath(savePath.getPath());
                                         Utility.takeScreenshot(playerRight.getImageInPlayingPath(), GameActivity.this);
-                                        gameView.setSpeed((int) (GameConstant.GAMESPEED * 2));
                                     }
                                     imgPreview.setImageBitmap(bmpPreview);
                                     txtPlayerUp.setText(gameView.getPlayerUp().getScore() + "公尺");
-                                    txtPlayerRight.setText(gameView.getPlayerDown().getScore() + "公尺");
+                                    txtPlayerDown.setText(gameView.getPlayerDown().getScore() + "公尺");
                                 }
                             }
                         });

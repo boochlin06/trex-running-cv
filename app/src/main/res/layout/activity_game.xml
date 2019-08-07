@@ -68,7 +68,7 @@
         tools:text="X58" />
 
     <TextView
-        android:id="@+id/txtPlayerRight"
+        android:id="@+id/txtPlayerDown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
