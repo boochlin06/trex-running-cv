@@ -55,7 +55,7 @@ public class PlayerCheckActivity extends AppCompatActivity {
 
     private Mat mCameraBuffer = null;
     boolean isCheckLeftDone = false;
-    boolean isCheckRightDone = false;
+    boolean isCheckRightDone = true;
     private Mat doneFrame;
     private Player playerLeft, playerRight;
     private static final String LIB_NAME_OPEN_CV = "opencv_java3";
@@ -228,7 +228,7 @@ public class PlayerCheckActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    isCheckRightDone = false;
+                    isCheckRightDone = true;
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

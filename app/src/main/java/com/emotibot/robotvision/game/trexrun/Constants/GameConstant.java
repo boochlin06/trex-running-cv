@@ -5,7 +5,7 @@ public class GameConstant {
     public static final long FRAME_TIME = 30;
     public static final long CHECK_GET_SCORE_JUDGE_TIME = 300;//ms
     public static final long PRODUCE_OBSTACLE_DISTANCE_GAP = 70;//ms
-    public static long GAME_TIME_LIMIT = 60; //60s
+    public static long GAME_TIME_LIMIT = 15; //60s
     public static final float PLAY_LIP_OPEN_LIMIT = 35;
     public static final float PLAYER_START_X = 100;
 
